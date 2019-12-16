@@ -1,56 +1,37 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View,TextInput, Text } from 'react-native';
 
-class Texto extends React.Component{
-  
-  state={
-    titulo:"hola chicos"
-  }
+export default class App extends React.Component {
 
-  handlePress = () =>{
+  state ={}
+
+  handleCahnge = (texto) =>{
     this.setState({
-      titulo:'hola amigos!!!.'
+      texto
     });
   }
-
-  render(){
-    const {titulo} = this.state;
-    return(
-      <Text onPress={this.handlePress}>{titulo}</Text>
-    );
-  }
-}
-
-export default function App() {
+render(){
+  const {texto} = this.state;
   return (
     <View style={styles.container}>
-      <Text style={styles.texto}>hola</Text>
-      <Text style={styles.texto2}>hola</Text>
-      <Text style={styles.texto3}>hola</Text>
+
+      <TextInput
+        onChangeText={this.handleCahnge}
+        placeholder="ingresar nombre"
+      />
+
+      <Text>{texto && `Mi nombre es: ${texto}`}</Text>
+
     </View>
   );
 }
+}
 
 const styles = StyleSheet.create({
-  texto:{
-    flex:1,
-    color:'red',
-    backgroundColor:'white'
-  },
-  texto2:{
-    flex:2,
-    color:'red',
-    backgroundColor:'black'
-  },
-  texto3:{
-    flex:3,
-    color:'red',
-    backgroundColor:'green'
-  },
   container: {
     flex: 1,
-    flexDirection:'row',
-    backgroundColor: '#42e6a4',
+    flexDirection:'column',
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
