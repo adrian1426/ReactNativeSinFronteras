@@ -1,5 +1,14 @@
 import React from 'react';
-import { StyleSheet, View,TextInput, Text } from 'react-native';
+import { 
+  StyleSheet, 
+  View,
+  TextInput, 
+  Text ,
+  Button, 
+  TouchableHighlight,
+  TouchableWithoutFeedback,
+  TouchableOpacity
+} from 'react-native';
 
 export default class App extends React.Component {
 
@@ -10,8 +19,12 @@ export default class App extends React.Component {
       texto
     });
   }
+
+  handlePress = () =>{
+    alert(`Tu nombre es: ${this.state.texto}`);
+  }
+
 render(){
-  const {texto} = this.state;
   return (
     <View style={styles.container}>
 
@@ -20,7 +33,27 @@ render(){
         placeholder="ingresar nombre"
       />
 
-      <Text>{texto && `Mi nombre es: ${texto}`}</Text>
+      <Button title="Aceptar" onPress={this.handlePress}/>
+
+      <TouchableHighlight 
+        style={styles.buton}
+        onPress={this.handlePress}
+      >
+        <Text>Aceptar</Text>
+      </TouchableHighlight>
+
+      <TouchableWithoutFeedback
+        onPress={this.handlePress}
+      >
+        <Text>Aceptar</Text>
+      </TouchableWithoutFeedback>
+
+      <TouchableOpacity 
+        style={styles.buton}
+        onPress={this.handlePress}
+      >
+        <Text>Aceptar</Text>
+      </TouchableOpacity>
 
     </View>
   );
@@ -30,9 +63,14 @@ render(){
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection:'column',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  buton:{
+    height:50,
+    marginTop:10,
+    padding: 15,
+    backgroundColor:'#50d890'
+  }
 });
