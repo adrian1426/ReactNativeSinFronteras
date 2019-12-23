@@ -1,43 +1,57 @@
 import React from 'react';
-import {Text, View, SectionList} from 'react-native';
+import {Text, View, FlatList, StyleSheet} from 'react-native';
+
+const styles = StyleSheet.create({
+  container:{
+    display: 'flex',
+    flex: 1,
+    justifyContent:'center',
+    alignItems:'center'
+  }
+});
 
 export default class App extends React.Component {
+
+  state={
+    loading: true,
+    users:[]
+  }
+
+  constructor(props){
+    super(props);
+    this.fetchUsers();
+  }
+
+  fetchUsers = async () =>{
+   const response = await fetch('https://jsonplaceholder.typicode.com/users');
+   const preUsers = await response.json();
+   const users = preUsers.map(x => ({...x, key:String(x.id)}));
+   this.setState({
+     users,
+     loading: false
+   });
+  }
+
 render(){
-  return (
-    <View>
-      <SectionList
-        sections={[
-          {
-            title:"Nombres",
-            data:[
-              {name:'Memphis' , key:'1'},
-              {name:'Hazard' , key:'2'},
-              {name:'Vinicius' , key:'3'},
-              {name:'Mbappe' , key:'4'},
-              {name:'Cavani' , key:'5'}
-            ]
-          },
-          {
-            title:"Giniacs",
-            data:[
-              {name:'Giniac' , key:'6'},
-              {name:'Valencia' , key:'7'},
-              {name:'Dos santos' , key:'8'},
-              {name:'Cavani' , key:'9'},
-              {name:'Giniac' , key:'10'},
-              {name:'Valencia' , key:'11'},
-              {name:'Dos santos' , key:'12'}
-            ]
-          }
-        ]}
-        renderItem={({item})=> 
-        <Text style={{fontSize:50}}>{item.name}</Text>
-        }
-        renderSectionHeader={({section})=>
-        <Text style={{fontSize: 40, backgroundColor:'gray'}}>{section.title}</Text>
-        }
-      />
-    </View>
+  const {loading, users} = this.state;
+
+  if(loading){
+    return(
+      <View style={styles.container}>
+        <Text>Cargando....</Text>
+      </View>
+    );
+  }
+
+  return(
+  <View>
+    <FlatList
+      data={users}
+      renderItem={({item})=>
+        <Text>{item.name}</Text>
+      }
+    />
+  </View>
   );
 }
 }
