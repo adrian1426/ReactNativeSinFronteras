@@ -1,5 +1,5 @@
 import React from 'react';
-import {View,StyleSheet, Button, Alert} from 'react-native';
+import {View,StyleSheet, Button, Modal, Text} from 'react-native';
 
 const styles = StyleSheet.create({
   container:{
@@ -7,24 +7,40 @@ const styles = StyleSheet.create({
     flex:1,
     justifyContent:'center',
     alignItems: 'center'
+  },
+  fondo:{
+    backgroundColor:'#bac7a7'
+  },
+  estiloModal:{
+    margin:55,
+    backgroundColor:'#ff896b',
+    borderRadius: 10
   }
 });
 
 export default class App extends React.Component {
 
-  handlePress = () =>{
-    Alert.alert('titulo','texto contenido',[
-      {text:'boton 1', onPress: () => Alert.alert('presionaste 1')},
-      {text:'boton 2', onPress: () => Alert.alert('presionaste 2')}
-    ]);
+  state={
+    open: false
   }
+
 render(){
+  const {open} = this.state;
   return(
-    <View style={styles.container}>
-      <Button 
-        title="click"
-        onPress={this.handlePress}
-      />
+    <View style={[styles.container,styles.fondo]}>
+
+      <Modal 
+        visible={open} 
+        animationType='slide'
+        transparent={true}
+      >
+        <View style={[styles.container,styles.estiloModal]}>
+          <Button title="Cerrar Modal" onPress={()=>this.setState({open:false})}/>
+        </View>
+      </Modal>
+
+      <Button title="Abrir Modal" onPress={()=>this.setState({open:true})}/>
+
     </View>
   );
 }
