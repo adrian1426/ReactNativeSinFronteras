@@ -1,25 +1,29 @@
 import React from 'react';
-import {Text, View,StyleSheet, ActivityIndicator} from 'react-native';
+import {View,StyleSheet, Button, Alert} from 'react-native';
 
 const styles = StyleSheet.create({
   container:{
     display: 'flex',
     flex:1,
-    justifyContent:'center'
-  },
-  picker:{
-    height:70,
-    width:150
+    justifyContent:'center',
+    alignItems: 'center'
   }
 });
 
 export default class App extends React.Component {
+
+  handlePress = () =>{
+    Alert.alert('titulo','texto contenido',[
+      {text:'boton 1', onPress: () => Alert.alert('presionaste 1')},
+      {text:'boton 2', onPress: () => Alert.alert('presionaste 2')}
+    ]);
+  }
 render(){
   return(
     <View style={styles.container}>
-      <ActivityIndicator
-        size="large"
-        color="gray"
+      <Button 
+        title="click"
+        onPress={this.handlePress}
       />
     </View>
   );
