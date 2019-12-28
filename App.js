@@ -1,5 +1,5 @@
 import React from 'react';
-import {View,StyleSheet, Button, Modal, Image} from 'react-native';
+import {View, StyleSheet, Button, AsyncStorage, Alert} from 'react-native';
 
 const styles = StyleSheet.create({
   container:{
@@ -10,46 +10,32 @@ const styles = StyleSheet.create({
   },
   fondo:{
     backgroundColor:'#bac7a7'
-  },
-  estiloModal:{
-    margin:55,
-    backgroundColor:'#ff896b',
-    borderRadius: 10
   }
 });
 
 export default class App extends React.Component {
 
-  state={
-    open: false
+  constructor(props){
+    super(props);
+    this.getDatos();
+  }
+
+  getDatos = async () =>{
+    const dato = await AsyncStorage.getItem('dato');
+    Alert.alert('Dato! ',dato);
+  }
+
+  handlePress = async () =>{
+    await AsyncStorage.setItem('dato','valor dato');
   }
 
 render(){
-  const {open} = this.state;
   return(
     <View style={[styles.container,styles.fondo]}>
-
-      <Modal 
-        visible={open} 
-        animationType='slide'
-        transparent={true}
-      >
-        <View style={[styles.container,styles.estiloModal]}>
-          <Button title="Cerrar Modal" onPress={()=>this.setState({open:false})}/>
-        </View>
-      </Modal>
-
-      <Image 
-        source={require('./assets/naruto.jpg')}
-        style={{height:300,width:300}}
+      <Button 
+        title="Asignar valor" 
+        onPress={this.handlePress}
       />
-      <Image 
-        source={{uri:'https://www.milenio.com/uploads/media/2019/11/04/el-estreno-de-naruto-shippuden_0_26_800_498.jpg'}}
-        style={{height:300,width:300}}
-      />
-
-      <Button title="Abrir Modal" onPress={()=>this.setState({open:true})}/>
-
     </View>
   );
 }
