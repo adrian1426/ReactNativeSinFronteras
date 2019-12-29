@@ -1,42 +1,44 @@
 import React from 'react';
-import {View, StyleSheet, Button, AsyncStorage, Alert} from 'react-native';
-
-const styles = StyleSheet.create({
-  container:{
-    display: 'flex',
-    flex:1,
-    justifyContent:'center',
-    alignItems: 'center'
-  },
-  fondo:{
-    backgroundColor:'#bac7a7'
-  }
-});
+import {View, Text, Button, StyleSheet} from 'react-native';
+import * as Permissions from 'expo-permissions';
+import * as Location from 'expo-location';
 
 export default class App extends React.Component {
 
-  constructor(props){
-    super(props);
-    this.getDatos();
+  state={
+    location: {coords:{}},
+    errorMessage: null
   }
 
-  getDatos = async () =>{
-    const dato = await AsyncStorage.getItem('dato');
-    Alert.alert('Dato! ',dato);
-  }
+  getLocation = async () =>{
+    const {status} = await Permissions.askAsync(Permissions.LOCATION);
+    if (status!== "granted"){
+      return this.setState({errorMessage:'Permisos denegados'});
+    }
 
-  handlePress = async () =>{
-    await AsyncStorage.setItem('dato','valor dato');
+    const location= await Location.getCurrentPositionAsync();
+    this.setState({location});
   }
 
 render(){
+  const {location} = this.state;
   return(
-    <View style={[styles.container,styles.fondo]}>
-      <Button 
-        title="Asignar valor" 
-        onPress={this.handlePress}
-      />
+    <View style={estilos.container}>
+      <Text>
+        {`latitud: ${location.coords.latitude}`}
+        {` longitud: ${location.coords.longitude}`}
+      </Text>
+      <Button title="solicitar permiso" onPress={this.getLocation}/>
     </View>
   );
 }
 }
+
+const estilos = StyleSheet.create({
+  container:{
+    display: "flex",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  }
+});
