@@ -1,4 +1,4 @@
-import React,{useReducer} from 'react';
+import React,{useReducer, useMemo} from 'react';
 import {View, StyleSheet,Text, Button} from 'react-native';
 
 const initialState={
@@ -21,9 +21,21 @@ const reducer = (state,action) =>{
   }
 };
 
+const users = [{name:'ahh',age:2},{name:'ahh2',age:3}];
+
 export default function App() {
 
   const [state,dispatch] = useReducer(reducer,initialState);
+  const totalAge = useMemo(()=>{
+    let age = 0;
+    console.log('calculando..');
+    users.forEach(x => {
+      age = age + x.age
+    });
+    return age;
+  },[users]);
+
+  console.log('edad total: ',totalAge);
 
   return(
     <View style={estilos.container}>
