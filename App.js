@@ -1,26 +1,35 @@
-import React,{useState,useEffect} from 'react';
-import {View, StyleSheet,Text} from 'react-native';
+import React,{useReducer} from 'react';
+import {View, StyleSheet,Text, Button} from 'react-native';
+
+const initialState={
+  cont: 0
+};
+
+const reducer = (state,action) =>{
+  switch (action.type) {
+    case 'incrementar':{
+      return {cont: state.cont + 1};
+    }
+      break;
+    case 'decrementar':{
+      return {cont: state.cont - 1};
+    }
+      break;
+    default:
+      return state;
+      break;
+  }
+};
 
 export default function App() {
 
-  const [loading, setLoading] = useState(true);
-  const [users,setUsers] = useState([]);
+  const [state,dispatch] = useReducer(reducer,initialState);
 
-  const fetchUsers = async () => {
-    const response = await fetch('https://jsonplaceholder.typicode.com/users');
-    const json = await response.json();
-    setUsers(json);
-    setLoading(false);
-  };
-  
-  useEffect( ()=>{
-    fetchUsers();
-  },[]);
-
-  const valor =  loading ? 'cargando...' : users[0].name;
   return(
     <View style={estilos.container}>
-      <Text>Nombre: {valor}</Text>
+      <Button title='Incrementar' onPress={()=> dispatch({type:'incrementar'})}/>
+      <Text>{state.cont}</Text>
+      <Button title='Decrementar' onPress={()=> dispatch({type:'decrementar'})}/>
     </View>
   );
 
