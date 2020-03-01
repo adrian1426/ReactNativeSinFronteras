@@ -1,25 +1,30 @@
-import React from 'react';
-import {View, StyleSheet,Dimensions} from 'react-native';
-import MapView from 'react-native-maps';
+import React,{useState,useEffect} from 'react';
+import {View, StyleSheet,Text} from 'react-native';
 
-export default class App extends React.Component {
+export default function App() {
 
-render(){
+  const [loading, setLoading] = useState(true);
+  const [users,setUsers] = useState([]);
+
+  const fetchUsers = async () => {
+    const response = await fetch('https://jsonplaceholder.typicode.com/users');
+    const json = await response.json();
+    setUsers(json);
+    setLoading(false);
+  };
+  
+  useEffect( ()=>{
+    fetchUsers();
+  },[]);
+
+  const valor =  loading ? 'cargando...' : users[0].name;
   return(
     <View style={estilos.container}>
-      <MapView
-        style={estilos.mapStyle}
-        initialRegion={{
-          latitude:-33.460064,
-          longitude: -70.652163,
-          latitudeDelta: 0.09,
-          longitudeDelta: 0.09
-        }}
-      />
+      <Text>Nombre: {valor}</Text>
     </View>
-  )
-}
-}
+  );
+
+};
 
 const estilos = StyleSheet.create({
   container: {
@@ -27,9 +32,5 @@ const estilos = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  mapStyle: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-  },
+  }
 });
