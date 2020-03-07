@@ -1,47 +1,25 @@
-import React,{useReducer, useMemo} from 'react';
+import React,{useState,useCallback} from 'react';
 import {View, StyleSheet,Text, Button} from 'react-native';
 
-const initialState={
-  cont: 0
-};
-
-const reducer = (state,action) =>{
-  switch (action.type) {
-    case 'incrementar':{
-      return {cont: state.cont + 1};
-    }
-      break;
-    case 'decrementar':{
-      return {cont: state.cont - 1};
-    }
-      break;
-    default:
-      return state;
-      break;
-  }
-};
-
-const users = [{name:'ahh',age:2},{name:'ahh2',age:3}];
-
+//useCallback mejoras temas de rendimiento y performance.
+//para que no se renderize desmedidamente las fucniones.
 export default function App() {
 
-  const [state,dispatch] = useReducer(reducer,initialState);
-  const totalAge = useMemo(()=>{
-    let age = 0;
-    console.log('calculando..');
-    users.forEach(x => {
-      age = age + x.age
-    });
-    return age;
-  },[users]);
+  const [cont,setCont] = useState(0);
 
-  console.log('edad total: ',totalAge);
+  const incrementar = useCallback(() =>{
+    setCont(cont + 1);
+  },[cont]);
+
+  const decrementar = useCallback(() =>{
+    setCont(cont - 1);
+  },[cont]);
 
   return(
     <View style={estilos.container}>
-      <Button title='Incrementar' onPress={()=> dispatch({type:'incrementar'})}/>
-      <Text>{state.cont}</Text>
-      <Button title='Decrementar' onPress={()=> dispatch({type:'decrementar'})}/>
+      <Button title='Incrementar' onPress={()=> incrementar()}/>
+      <Text>{cont}</Text>
+      <Button title='Decrementar' onPress={()=> decrementar()}/>
     </View>
   );
 
